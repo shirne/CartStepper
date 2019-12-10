@@ -4,7 +4,7 @@ A fully customizable Flutter Widget to get count. It can be applicable in e-comm
 
 *This package is Forked from [AYNStepperView](https://github.com/AnsarAzees/AYNStepperView)*
 
-![Preview](assets/preview.PNG)
+![Preview](assets/preview.png)
 
 
 ## Arguments
