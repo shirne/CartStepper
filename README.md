@@ -1,4 +1,4 @@
-# ayn_stepper
+# number_stepper
 
 A fully customizable Flutter Widget to get count. It can be applicable in e-commerce apps for getting cart count.
 
