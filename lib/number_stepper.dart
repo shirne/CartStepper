@@ -1,8 +1,6 @@
-
 library number_stepper;
 
 import 'package:flutter/material.dart';
-
 
 class NumberStepper extends StatefulWidget {
   final int count;
@@ -16,23 +14,22 @@ class NumberStepper extends StatefulWidget {
   final Function(int count) didChangeCount;
 
   NumberStepper(
-      {Key key,
-        this.count,
-        this.didChangeCount,
-        this.activeForegroundColor = Colors.white,
-        this.activeBackgroundColor = Colors.blue,
-        this.deActiveForegroundColor = Colors.black,
-        this.deActiveBackgroundColor = Colors.white,
-        this.size = 50.0,
-        this.axis = Axis.horizontal,
-        this.numberSize = 2})
+      {Key? key,
+      this.count = 0,
+      required this.didChangeCount,
+      this.activeForegroundColor = Colors.white,
+      this.activeBackgroundColor = Colors.blue,
+      this.deActiveForegroundColor = Colors.black,
+      this.deActiveBackgroundColor = Colors.white,
+      this.size = 50.0,
+      this.axis = Axis.horizontal,
+      this.numberSize = 2})
       : super(key: key);
   @override
   _NumberStepperState createState() => _NumberStepperState();
 }
 
 class _NumberStepperState extends State<NumberStepper> {
-
   @override
   void initState() {
     super.initState();
@@ -40,42 +37,49 @@ class _NumberStepperState extends State<NumberStepper> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> childs = [Expanded(
-      child: Container(
-        child: IconButton(
-          iconSize: widget.size * 0.6,
-          padding: EdgeInsets.all(widget.size*0.2),
-          icon: Icon(
-            Icons.add,
-            color: widget.count != 0 ? widget.activeForegroundColor : widget.deActiveForegroundColor,
+    List<Widget> childs = [
+      Expanded(
+        child: Container(
+          child: IconButton(
+            iconSize: widget.size * 0.6,
+            padding: EdgeInsets.all(widget.size * 0.2),
+            icon: Icon(
+              Icons.add,
+              color: widget.count != 0
+                  ? widget.activeForegroundColor
+                  : widget.deActiveForegroundColor,
+            ),
+            onPressed: () {
+              widget.didChangeCount(widget.count + 1);
+            },
           ),
-          onPressed: () {
-            widget.didChangeCount(widget.count + 1);
-          },
         ),
-      ),
-    )];
-    if(widget.count > 0){
+      )
+    ];
+    if (widget.count > 0) {
       childs.add(Container(
-        width: widget.axis == Axis.vertical?widget.size: widget.size * widget.numberSize * .5,
-          child: Center(
-            child: Text(widget.count.toString(),
-                softWrap: false,
-                style: TextStyle(
-                    color: widget.activeForegroundColor,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Quicksand",
-                    fontStyle: FontStyle.normal,
-                    fontSize: widget.size * 0.5,
-                ),
+        width: widget.axis == Axis.vertical
+            ? widget.size
+            : widget.size * widget.numberSize * .5,
+        child: Center(
+          child: Text(
+            widget.count.toString(),
+            softWrap: false,
+            style: TextStyle(
+              color: widget.activeForegroundColor,
+              fontWeight: FontWeight.w400,
+              fontFamily: "Quicksand",
+              fontStyle: FontStyle.normal,
+              fontSize: widget.size * 0.5,
             ),
           ),
+        ),
       ));
       childs.add(Expanded(
         child: Container(
           child: IconButton(
-            iconSize: widget.size * 0.6,
-              padding: EdgeInsets.all(widget.size*0.2),
+              iconSize: widget.size * 0.6,
+              padding: EdgeInsets.all(widget.size * 0.2),
               icon: Icon(
                 Icons.remove,
                 color: widget.activeForegroundColor,
@@ -93,10 +97,10 @@ class _NumberStepperState extends State<NumberStepper> {
 
     double width = widget.size;
     double height = width;
-    if(widget.count > 0) {
+    if (widget.count > 0) {
       if (widget.axis == Axis.vertical) {
         height *= 2 + widget.numberSize * .5;
-      }else{
+      } else {
         width *= 2 + widget.numberSize * .5;
       }
     }
@@ -111,16 +115,19 @@ class _NumberStepperState extends State<NumberStepper> {
               blurRadius: 5.0,
             ),
           ],
-          color:
-          widget.count != 0 ? widget.activeBackgroundColor : widget.deActiveBackgroundColor),
+          color: widget.count != 0
+              ? widget.activeBackgroundColor
+              : widget.deActiveBackgroundColor),
       height: height,
       duration: Duration(milliseconds: 300),
       curve: Curves.easeIn,
-      child: widget.axis == Axis.vertical? Column(
-        children: childs,
-      ): Row(
-        children: childs.reversed.toList(),
-      ),
+      child: widget.axis == Axis.vertical
+          ? Column(
+              children: childs,
+            )
+          : Row(
+              children: childs.reversed.toList(),
+            ),
     );
   }
 }
