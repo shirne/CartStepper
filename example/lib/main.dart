@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:cart_stepper/stepper.dart';
+import 'package:cart_stepper/cart_stepper.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,4 +1,4 @@
-library stepper;
+library cart_stepper;
 
 import 'package:flutter/material.dart';
 
