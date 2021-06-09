@@ -1,8 +1,8 @@
-library number_stepper;
+library stepper;
 
 import 'package:flutter/material.dart';
 
-class NumberStepper extends StatefulWidget {
+class CartStepper extends StatefulWidget {
   final int count;
   final double size;
   final double numberSize;
@@ -13,7 +13,7 @@ class NumberStepper extends StatefulWidget {
   final Color deActiveBackgroundColor;
   final Function(int count) didChangeCount;
 
-  NumberStepper(
+  CartStepper(
       {Key? key,
       this.count = 0,
       required this.didChangeCount,
@@ -26,10 +26,10 @@ class NumberStepper extends StatefulWidget {
       this.numberSize = 2})
       : super(key: key);
   @override
-  _NumberStepperState createState() => _NumberStepperState();
+  _CartStepperState createState() => _CartStepperState();
 }
 
-class _NumberStepperState extends State<NumberStepper> {
+class _CartStepperState extends State<CartStepper> {
   @override
   void initState() {
     super.initState();

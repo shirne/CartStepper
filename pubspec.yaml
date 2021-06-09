@@ -1,8 +1,8 @@
-name: number_stepper
-description: A new Flutter package.
+name: cart_stepper
+description: A flutter numeric stepper input.
 version: 1.0.0
-author: Shirne <shirne@126.com>
-homepage: https://github.com/AnsarAzees/AYNStepperView/
+homepage:
+repository: https://github.com/shirne/CartStepper/
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
