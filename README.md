@@ -23,7 +23,7 @@ A fully customizable Flutter Widget to get count. It can be applicable in e-comm
 Create a widget to load and edit an image:
 ```dart
 Widget _buildStepper() {
-  return NumberStepper(
+  return CartStepper(
                count: _counter,
                size: 30,
                activeForegroundColor: Colors.purple,
