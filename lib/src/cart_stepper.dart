@@ -44,20 +44,22 @@ class CartStepper<VM extends num> extends StatefulWidget {
 
 class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   bool _editMode = false;
+  String lastText = '';
   late TextEditingController _controller;
   late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget._count.toString())
-      ..addListener(() {});
+    lastText = widget._count.toString();
+    _controller = TextEditingController(text: lastText);
     _focusNode = FocusNode();
   }
 
-  VM parseValue(String text) {
+  VM? parseValue(String text) {
+    if (text.isEmpty) return 0 as VM;
     double? value = double.tryParse(text);
-    if (value == null) return widget._count;
+    if (value == null) return null;
     if (value is VM) return value as VM;
     return value.toInt() as VM;
   }
@@ -70,6 +72,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final dfColor = widget.deActiveForegroundColor ?? colorScheme.onSurface;
     final dbColor = widget.deActiveBackgroundColor ?? colorScheme.surface;
 
+    final isExpanded = _editMode || widget._count > 0;
+
     List<Widget> childs = [
       Expanded(
         child: IconButton(
@@ -77,7 +81,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           padding: EdgeInsets.all(widget.size * 0.2),
           icon: Icon(
             Icons.add,
-            color: widget._count > 0 ? afColor : dfColor,
+            color: isExpanded ? afColor : dfColor,
           ),
           onPressed: () {
             widget.didChangeCount((widget._count + widget._stepper) as VM);
@@ -85,7 +89,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         ),
       ),
     ];
-    if (widget._count > 0) {
+    if (isExpanded) {
       childs.add(
         Container(
           alignment: Alignment.center,
@@ -95,6 +99,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           child: GestureDetector(
             onTap: () {
               setState(() {
+                lastText = widget._count.toString();
+                _controller.text = lastText;
                 _editMode = !_editMode;
                 _focusNode.requestFocus();
               });
@@ -107,11 +113,22 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     cursorColor: afColor,
                     backgroundCursorColor: abColor,
                     onEditingComplete: () {
-                      widget.didChangeCount(parseValue(_controller.text));
                       setState(() {
                         _editMode = false;
                       });
-                    })
+                    },
+                    onChanged: (String value) {
+                      VM? newValue = parseValue(_controller.text);
+                      if (newValue == null) {
+                        _controller.text = lastText;
+                        _controller.selection =
+                            TextSelection.collapsed(offset: lastText.length);
+                      } else {
+                        lastText = value;
+                        widget.didChangeCount(newValue);
+                      }
+                    },
+                  )
                 : Text(
                     widget._count.toString(),
                     softWrap: false,
@@ -145,7 +162,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
 
     double width = widget.size;
     double height = width;
-    if (widget._count > 0) {
+    if (isExpanded) {
       if (widget.axis == Axis.vertical) {
         height *= 2 + widget.numberSize * .5;
       } else {
@@ -157,7 +174,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
       shape: widget.shape ?? BoxShape.rectangle,
       borderRadius: BorderRadius.all(widget.radius ?? Radius.circular(height)),
       shadowColor: widget.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
-      color: widget._count != 0 ? abColor : dbColor,
+      color: isExpanded ? abColor : dbColor,
       elevation: widget.elevation,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
