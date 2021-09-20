@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(
-        title: "Number Stepper View",
+        title: "Cart Stepper View",
       ),
     );
   }
