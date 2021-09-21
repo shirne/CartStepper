@@ -84,6 +84,9 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
             color: isExpanded ? afColor : dfColor,
           ),
           onPressed: () {
+            setState(() {
+              _editMode = false;
+            });
             widget.didChangeCount((widget._count + widget._stepper) as VM);
           },
         ),
@@ -152,6 +155,9 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
             color: afColor,
           ),
           onPressed: () {
+            setState(() {
+              _editMode = false;
+            });
             if (widget._count > 0) {
               widget.didChangeCount((widget._count - widget._stepper) as VM);
             }

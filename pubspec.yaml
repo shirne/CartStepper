@@ -1,6 +1,6 @@
 name: cart_stepper
 description: A flutter numeric stepper input.
-version: 2.0.1
+version: 2.0.2
 homepage:
 repository: https://github.com/shirne/CartStepper/
 
