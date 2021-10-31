@@ -56,6 +56,12 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     _focusNode = FocusNode();
   }
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   VM? parseValue(String text) {
     if (text.isEmpty) return 0 as VM;
     double? value = double.tryParse(text);
