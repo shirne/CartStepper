@@ -1,40 +1,46 @@
 library cart_stepper;
 
+import 'package:cart_stepper/src/stepper_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
+/// Cart stepper widget
 class CartStepper<VM extends num> extends StatefulWidget {
   final VM _count;
+
   final VM _stepper;
+
+  /// size of the stepper button,normally it's min(with,height)
   final double size;
+
+  /// number length of the value
   final double numberSize;
+
+  /// widget direction
   final Axis axis;
-  final Color? activeForegroundColor;
-  final Color? activeBackgroundColor;
-  final Color? deActiveForegroundColor;
-  final Color? deActiveBackgroundColor;
+
+  /// value callback
   final void Function(VM count) didChangeCount;
+
+  /// elevation of [PhysicalModel]
   final double elevation;
-  final BoxShape? shape;
-  final Radius? radius;
-  final Color? shadowColor;
+
+  /// widget style
+  final CartStepperStyle? style;
 
   const CartStepper({
     Key? key,
+
+    /// value
     VM? count,
+
+    /// step value
     VM? stepper,
     required this.didChangeCount,
-    this.activeForegroundColor,
-    this.activeBackgroundColor,
-    this.deActiveForegroundColor,
-    this.deActiveBackgroundColor,
     this.size = 30.0,
     this.axis = Axis.horizontal,
     this.numberSize = 2,
     this.elevation = 2,
-    this.shape,
-    this.radius,
-    this.shadowColor,
+    this.style,
   })  : _count = (count ?? 0) as VM,
         _stepper = (stepper ?? 1) as VM,
         super(key: key);
@@ -73,10 +79,10 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final afColor = widget.activeForegroundColor ?? colorScheme.onPrimary;
-    final abColor = widget.activeBackgroundColor ?? colorScheme.primary;
-    final dfColor = widget.deActiveForegroundColor ?? colorScheme.onSurface;
-    final dbColor = widget.deActiveBackgroundColor ?? colorScheme.surface;
+    final style = widget.style ??
+        // ? not fixed util 3.0.3
+        Theme.of(context).extension<CartStepperTheme?>()?.style ??
+        CartStepperStyle.fromColorScheme(colorScheme);
 
     final isExpanded = _editMode || widget._count > 0;
 
@@ -87,7 +93,9 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           padding: EdgeInsets.all(widget.size * 0.2),
           icon: Icon(
             Icons.add,
-            color: isExpanded ? afColor : dfColor,
+            color: isExpanded
+                ? style.activeForegroundColor
+                : style.deActiveForegroundColor,
           ),
           onPressed: () {
             setState(() {
@@ -118,9 +126,9 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                 ? EditableText(
                     controller: _controller,
                     focusNode: _focusNode,
-                    style: TextStyle(color: afColor),
-                    cursorColor: afColor,
-                    backgroundCursorColor: abColor,
+                    style: TextStyle(color: style.activeForegroundColor),
+                    cursorColor: style.activeForegroundColor,
+                    backgroundCursorColor: style.activeBackgroundColor,
                     onEditingComplete: () {
                       setState(() {
                         _editMode = false;
@@ -142,7 +150,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     widget._count.toString(),
                     softWrap: false,
                     style: TextStyle(
-                      color: afColor,
+                      color: style.activeForegroundColor,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Quicksand",
                       fontStyle: FontStyle.normal,
@@ -158,7 +166,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           padding: EdgeInsets.all(widget.size * 0.2),
           icon: Icon(
             Icons.remove,
-            color: afColor,
+            color: style.activeForegroundColor,
           ),
           onPressed: () {
             setState(() {
@@ -183,10 +191,12 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     }
 
     return AnimatedPhysicalModel(
-      shape: widget.shape ?? BoxShape.rectangle,
-      borderRadius: BorderRadius.all(widget.radius ?? Radius.circular(height)),
-      shadowColor: widget.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
-      color: isExpanded ? abColor : dbColor,
+      shape: style.shape,
+      borderRadius: BorderRadius.all(style.radius ?? Radius.circular(height)),
+      shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
+      color: isExpanded
+          ? style.activeBackgroundColor
+          : style.deActiveBackgroundColor,
       elevation: widget.elevation,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,

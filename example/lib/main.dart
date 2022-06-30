@@ -63,7 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CartStepperInt(
-                      radius: Radius.zero,
+                      style: CartStepperStyle.fromTheme(
+                        Theme.of(context),
+                        radius: Radius.zero,
+                      ),
                       elevation: 7,
                       count: _counterInit,
                       didChangeCount: (count) {
@@ -150,11 +153,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Center(
                       child: CartStepperInt(
                         count: _counter,
-                        radius: Radius.zero,
                         size: 30,
-                        deActiveForegroundColor: Colors.red,
-                        activeForegroundColor: Colors.white,
-                        activeBackgroundColor: Colors.pinkAccent,
+                        style: CartStepperStyle(
+                          deActiveForegroundColor: Colors.red,
+                          activeForegroundColor: Colors.white,
+                          activeBackgroundColor: Colors.pinkAccent,
+                          radius: Radius.zero,
+                        ),
                         didChangeCount: (count) {
                           setState(() {
                             _counter = count;
@@ -188,7 +193,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Center(
                 child: CartStepperInt(
                   count: _counterLimit,
-                  radius: Radius.circular(3),
+                  style: CartStepperStyle.fromTheme(
+                    Theme.of(context),
+                    radius: Radius.circular(3),
+                  ),
                   size: 30,
                   didChangeCount: (count) {
                     if (count < 1) {

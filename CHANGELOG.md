@@ -1,3 +1,7 @@
+## [3.0.0] - 2022/06/30
+* 增加CartStepperStyle 和CartStepperTheme 
+  将颜色和形状设定归纳到style中，可以在Theme.extension中初始化
+
 ## [2.0.2] - 2021/09/21
 * 修复按钮点击时恢复非编辑模式
 
