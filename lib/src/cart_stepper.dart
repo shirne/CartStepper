@@ -72,6 +72,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
       }
     });
 
+  num defaultValue = 0;
+
   @override
   void initState() {
     super.initState();
@@ -105,23 +107,21 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final isExpanded = _editMode || widget._value > 0;
 
     List<Widget> childs = [
-      Expanded(
-        child: IconButton(
-          iconSize: widget.size * 0.6,
-          padding: EdgeInsets.all(widget.size * 0.2),
-          icon: Icon(
-            Icons.add,
-            color: isExpanded
-                ? style.activeForegroundColor
-                : style.deActiveForegroundColor,
-          ),
-          onPressed: () {
-            setState(() {
-              _editMode = false;
-            });
-            widget.didChangeCount((widget._value + widget._stepper) as VM);
-          },
+      IconButton(
+        iconSize: widget.size * 0.6,
+        padding: EdgeInsets.all(widget.size * 0.2),
+        icon: Icon(
+          Icons.add,
+          color: isExpanded
+              ? style.activeForegroundColor
+              : style.deActiveForegroundColor,
         ),
+        onPressed: () {
+          setState(() {
+            _editMode = false;
+          });
+          widget.didChangeCount((widget._value + widget._stepper) as VM);
+        },
       ),
     ];
     if (isExpanded) {
@@ -180,41 +180,33 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         ),
       );
       childs.add(
-        Expanded(
-          child: IconButton(
-            iconSize: widget.size * 0.6,
-            padding: EdgeInsets.all(widget.size * 0.2),
-            icon: Icon(
-              Icons.remove,
-              color: style.activeForegroundColor,
-            ),
-            onPressed: () {
-              setState(() {
-                _editMode = false;
-              });
-              if (widget._value > 0) {
-                widget.didChangeCount(
-                    math.max((widget._value - widget._stepper), 0) as VM);
-              }
-            },
+        IconButton(
+          iconSize: widget.size * 0.6,
+          padding: EdgeInsets.all(widget.size * 0.2),
+          icon: Icon(
+            Icons.remove,
+            color: style.activeForegroundColor,
           ),
+          onPressed: () {
+            setState(() {
+              _editMode = false;
+            });
+            if (widget._value > 0) {
+              widget.didChangeCount(math.max(
+                  (widget._value - widget._stepper),
+                  VM is int
+                      ? defaultValue.toInt()
+                      : defaultValue.toDouble()) as VM);
+            }
+          },
         ),
       );
     }
 
-    double width = widget.size;
-    double height = width;
-    if (isExpanded) {
-      if (widget.axis == Axis.vertical) {
-        height *= 2 + widget.numberSize * .5;
-      } else {
-        width *= 2 + widget.numberSize * .5;
-      }
-    }
-
     return AnimatedPhysicalModel(
       shape: style.shape,
-      borderRadius: BorderRadius.all(style.radius ?? Radius.circular(height)),
+      borderRadius:
+          BorderRadius.all(style.radius ?? Radius.circular(widget.size)),
       shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
       color: isExpanded
           ? style.activeBackgroundColor
@@ -222,17 +214,15 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
       elevation: widget.elevation,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: widget.axis == Axis.vertical
-            ? Column(
-                children: childs,
-              )
-            : Row(
-                children: childs.reversed.toList(),
-              ),
-      ),
+      child: widget.axis == Axis.vertical
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: childs,
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: childs.reversed.toList(),
+            ),
     );
   }
 }
