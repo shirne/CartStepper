@@ -1,22 +1,25 @@
+## [3.0.1] - 2022/09/14
+* Add textStyle
+* add argument value deprecated argument count
+
 ## [3.0.0] - 2022/06/30
-* 增加CartStepperStyle 和CartStepperTheme 
-  将颜色和形状设定归纳到style中，可以在Theme.extension中初始化
+* Add CartStepperStyle & CartStepperTheme to support customize style in ThemeData
 
 ## [2.0.2] - 2021/09/21
-* 修复按钮点击时恢复非编辑模式
+* fix edit mode
 
 ## [2.0.1] - 2021/09/20
-* 修复编辑模式非法字符和完成
+* fix edit invalid char & complete
 
 ## [2.0.0] - 2021/09/20
-* 升级dart库
-* 支持int和double两种数值类型
-* 支持形状定义
-* 支持直接编辑值
+* upgrade dart version
+* supported int & double
+* supported customize shape
+* supported edit mode
 
 ## [1.0.1] - 2021/07/25.
-* readme修正
-* 代码优化
+* fix readme
+* code format
 
 ## [1.0.0] - 2019/12/10.
 
