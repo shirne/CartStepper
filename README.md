@@ -29,7 +29,7 @@ CartStepperStyle:
   - shadowColor: Color
 
 ## Using
-Create a widget to load and edit an image:
+Create a widget to show and modify a number:
 ```dart
 Widget _buildStepper() {
   return CartStepperInt(
