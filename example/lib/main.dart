@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:cart_stepper/cart_stepper.dart';
@@ -52,77 +54,101 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ListView(
           children: <Widget>[
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.only(top: 25),
-                child: Text('普通调用:'),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text('Flutter: ${Platform.version}'),
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CartStepperInt(
-                    style: CartStepperStyle.fromTheme(
-                      Theme.of(context),
-                      radius: Radius.zero,
-                    ),
-                    elevation: 7,
-                    value: _counterInit,
-                    didChangeCount: (count) {
-                      setState(() {
-                        _counterInit = count;
-                      });
-                    },
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text('普通调用:'),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CartStepperInt(
+                              style: CartStepperStyle.fromTheme(
+                                Theme.of(context),
+                                radius: Radius.zero,
+                              ),
+                              elevation: 7,
+                              value: _counterInit,
+                              didChangeCount: (count) {
+                                setState(() {
+                                  _counterInit = count;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CartStepperDouble(
+                              value: _dCounter,
+                              stepper: 0.01,
+                              didChangeCount: (count) {
+                                setState(() {
+                                  _dCounter = count;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CartStepperDouble(
-                    value: _dCounter,
-                    stepper: 0.01,
-                    didChangeCount: (count) {
-                      setState(() {
-                        _dCounter = count;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 25),
-                child: Text('纵向:'),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CartStepperInt(
-                    value: _counter,
-                    axis: Axis.vertical,
-                    didChangeCount: (count) {
-                      setState(() {
-                        _counter = count;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CartStepperDouble(
-                    value: _dCounter,
-                    stepper: 0.01,
-                    axis: Axis.vertical,
-                    didChangeCount: (count) {
-                      setState(() {
-                        _dCounter = count;
-                      });
-                    },
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 25),
+                          child: Text('纵向:'),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CartStepperInt(
+                              value: _counter,
+                              axis: Axis.vertical,
+                              didChangeCount: (count) {
+                                setState(() {
+                                  _counter = count;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CartStepperDouble(
+                              value: _dCounter,
+                              stepper: 0.01,
+                              axis: Axis.vertical,
+                              didChangeCount: (count) {
+                                setState(() {
+                                  _dCounter = count;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
