@@ -43,6 +43,9 @@ class CartStepperStyle {
   /// shadow color 阴影颜色
   final Color? shadowColor;
 
+  /// value text style 显示值的字体样式
+  final TextStyle? textStyle;
+
   const CartStepperStyle({
     this.activeForegroundColor = Colors.white,
     this.activeBackgroundColor = Colors.blue,
@@ -51,6 +54,7 @@ class CartStepperStyle {
     this.shape = BoxShape.rectangle,
     this.radius,
     this.shadowColor,
+    this.textStyle,
   });
 
   factory CartStepperStyle.fromTheme(
@@ -89,6 +93,7 @@ class CartStepperStyle {
     BoxShape? shape,
     Radius? radius,
     Color? shadowColor,
+    TextStyle? textStyle,
   }) {
     return CartStepperStyle(
       activeForegroundColor:
@@ -102,6 +107,7 @@ class CartStepperStyle {
       shape: shape ?? this.shape,
       radius: radius ?? this.radius,
       shadowColor: shadowColor ?? this.shadowColor,
+      textStyle: textStyle ?? this.textStyle,
     );
   }
 }

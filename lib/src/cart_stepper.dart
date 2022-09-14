@@ -1,11 +1,39 @@
 library cart_stepper;
 
-import 'package:cart_stepper/src/stepper_style.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
+import 'stepper_style.dart';
+
+const _textStyle = TextStyle(
+  fontWeight: FontWeight.w400,
+  fontFamily: "Quicksand",
+  fontStyle: FontStyle.normal,
+);
 
 /// Cart stepper widget
 class CartStepper<VM extends num> extends StatefulWidget {
-  final VM _count;
+  const CartStepper({
+    Key? key,
+
+    /// value
+    VM? value,
+    @Deprecated('use value instead') VM? count,
+
+    /// step value
+    VM? stepper,
+    required this.didChangeCount,
+    this.size = 30.0,
+    this.axis = Axis.horizontal,
+    this.numberSize = 2,
+    this.elevation = 2,
+    this.style,
+  })  : _value = (value ?? count ?? 0) as VM,
+        _stepper = (stepper ?? 1) as VM,
+        super(key: key);
+
+  final VM _value;
 
   final VM _stepper;
 
@@ -19,7 +47,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
   final Axis axis;
 
   /// value callback
-  final void Function(VM count) didChangeCount;
+  final ValueChanged<VM> didChangeCount;
 
   /// elevation of [PhysicalModel]
   final double elevation;
@@ -27,23 +55,6 @@ class CartStepper<VM extends num> extends StatefulWidget {
   /// widget style
   final CartStepperStyle? style;
 
-  const CartStepper({
-    Key? key,
-
-    /// value
-    VM? count,
-
-    /// step value
-    VM? stepper,
-    required this.didChangeCount,
-    this.size = 30.0,
-    this.axis = Axis.horizontal,
-    this.numberSize = 2,
-    this.elevation = 2,
-    this.style,
-  })  : _count = (count ?? 0) as VM,
-        _stepper = (stepper ?? 1) as VM,
-        super(key: key);
   @override
   State<CartStepper<VM>> createState() => _CartStepperState<VM>();
 }
@@ -51,20 +62,27 @@ class CartStepper<VM extends num> extends StatefulWidget {
 class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   bool _editMode = false;
   String lastText = '';
-  late TextEditingController _controller;
-  late FocusNode _focusNode;
+  late final TextEditingController _controller;
+  late final FocusNode _focusNode = FocusNode()
+    ..addListener(() {
+      if (_editMode && !_focusNode.hasFocus) {
+        setState(() {
+          _editMode = false;
+        });
+      }
+    });
 
   @override
   void initState() {
     super.initState();
-    lastText = widget._count.toString();
+    lastText = widget._value.toString();
     _controller = TextEditingController(text: lastText);
-    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -80,11 +98,11 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final style = widget.style ??
-        // ? not fixed util 3.0.3
+        // ? not fixed util 3.0.4
         Theme.of(context).extension<CartStepperTheme?>()?.style ??
         CartStepperStyle.fromColorScheme(colorScheme);
 
-    final isExpanded = _editMode || widget._count > 0;
+    final isExpanded = _editMode || widget._value > 0;
 
     List<Widget> childs = [
       Expanded(
@@ -101,32 +119,36 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
             setState(() {
               _editMode = false;
             });
-            widget.didChangeCount((widget._count + widget._stepper) as VM);
+            widget.didChangeCount((widget._value + widget._stepper) as VM);
           },
         ),
       ),
     ];
     if (isExpanded) {
       childs.add(
-        Container(
-          alignment: Alignment.center,
-          width: widget.axis == Axis.vertical
-              ? widget.size
-              : widget.size * widget.numberSize * .5,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                lastText = widget._count.toString();
-                _controller.text = lastText;
-                _editMode = !_editMode;
-                _focusNode.requestFocus();
-              });
-            },
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              lastText = widget._value.toString();
+              _controller.text = lastText;
+              _editMode = !_editMode;
+              _focusNode.requestFocus();
+            });
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            alignment: Alignment.center,
+            width: widget.axis == Axis.vertical
+                ? widget.size
+                : widget.size * widget.numberSize * .5,
             child: _editMode
                 ? EditableText(
                     controller: _controller,
                     focusNode: _focusNode,
-                    style: TextStyle(color: style.activeForegroundColor),
+                    style: _textStyle.merge(style.textStyle).copyWith(
+                          color: style.activeForegroundColor,
+                          fontSize: widget.size * 0.5,
+                        ),
                     cursorColor: style.activeForegroundColor,
                     backgroundCursorColor: style.activeBackgroundColor,
                     onEditingComplete: () {
@@ -147,37 +169,37 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     },
                   )
                 : Text(
-                    widget._count.toString(),
+                    widget._value.toString(),
                     softWrap: false,
-                    style: TextStyle(
-                      color: style.activeForegroundColor,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Quicksand",
-                      fontStyle: FontStyle.normal,
-                      fontSize: widget.size * 0.5,
-                    ),
+                    style: _textStyle.merge(style.textStyle).copyWith(
+                          color: style.activeForegroundColor,
+                          fontSize: widget.size * 0.5,
+                        ),
                   ),
           ),
         ),
       );
-      childs.add(Expanded(
-        child: IconButton(
-          iconSize: widget.size * 0.6,
-          padding: EdgeInsets.all(widget.size * 0.2),
-          icon: Icon(
-            Icons.remove,
-            color: style.activeForegroundColor,
+      childs.add(
+        Expanded(
+          child: IconButton(
+            iconSize: widget.size * 0.6,
+            padding: EdgeInsets.all(widget.size * 0.2),
+            icon: Icon(
+              Icons.remove,
+              color: style.activeForegroundColor,
+            ),
+            onPressed: () {
+              setState(() {
+                _editMode = false;
+              });
+              if (widget._value > 0) {
+                widget.didChangeCount(
+                    math.max((widget._value - widget._stepper), 0) as VM);
+              }
+            },
           ),
-          onPressed: () {
-            setState(() {
-              _editMode = false;
-            });
-            if (widget._count > 0) {
-              widget.didChangeCount((widget._count - widget._stepper) as VM);
-            }
-          },
         ),
-      ));
+      );
     }
 
     double width = widget.size;
