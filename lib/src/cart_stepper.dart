@@ -101,7 +101,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final colorScheme = Theme.of(context).colorScheme;
     final style = widget.style ??
         // ? not fixed util 3.0.4
-        Theme.of(context).extension<CartStepperTheme?>()?.style ??
+        Theme.of(context).extension<CartStepperTheme>()?.style ??
         CartStepperStyle.fromColorScheme(colorScheme);
 
     final isExpanded = _editMode || widget._value > 0;
