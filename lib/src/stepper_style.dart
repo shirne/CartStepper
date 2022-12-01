@@ -83,6 +83,7 @@ class CartStepperStyle {
     ColorScheme colorScheme, {
     BoxShape shape = BoxShape.rectangle,
     Radius? radius,
+    double? elevation,
   }) {
     return CartStepperStyle(
       activeForegroundColor: colorScheme.onPrimary,
@@ -92,6 +93,7 @@ class CartStepperStyle {
       shadowColor: colorScheme.shadow,
       shape: shape,
       radius: radius,
+      elevation: elevation ?? 2,
     );
   }
 
