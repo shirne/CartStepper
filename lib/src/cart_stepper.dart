@@ -103,21 +103,30 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final isExpanded = _editMode || widget._value > 0;
 
     List<Widget> childs = [
-      IconButton(
-        iconSize: widget.size * 0.6,
-        padding: EdgeInsets.all(widget.size * 0.2),
-        icon: Icon(
-          Icons.add,
-          color: isExpanded
-              ? style.activeForegroundColor
-              : style.deActiveForegroundColor,
-        ),
-        onPressed: () {
-          setState(() {
-            _editMode = false;
-          });
+      GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Feedback.forTap(context);
+          if (_editMode) {
+            setState(() {
+              _editMode = false;
+            });
+          }
           widget.didChangeCount((widget._value + widget._stepper) as VM);
         },
+        child: SizedBox(
+          width: widget.size,
+          height: widget.size,
+          child: Center(
+            child: Icon(
+              Icons.add,
+              size: widget.size,
+              color: isExpanded
+                  ? style.activeForegroundColor
+                  : style.deActiveForegroundColor,
+            ),
+          ),
+        ),
       ),
     ];
     if (isExpanded) {
@@ -141,6 +150,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                 ? EditableText(
                     controller: _controller,
                     focusNode: _focusNode,
+                    textAlign: TextAlign.center,
                     style: _textStyle.merge(style.textStyle).copyWith(
                           color: style.activeForegroundColor,
                           fontSize: widget.size * 0.5,
@@ -176,17 +186,15 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         ),
       );
       childs.add(
-        IconButton(
-          iconSize: widget.size * 0.6,
-          padding: EdgeInsets.all(widget.size * 0.2),
-          icon: Icon(
-            Icons.remove,
-            color: style.activeForegroundColor,
-          ),
-          onPressed: () {
-            setState(() {
-              _editMode = false;
-            });
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Feedback.forTap(context);
+            if (_editMode) {
+              setState(() {
+                _editMode = false;
+              });
+            }
             if (widget._value > 0) {
               widget.didChangeCount(math.max(
                   (widget._value - widget._stepper),
@@ -195,6 +203,17 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                       : defaultValue.toDouble()) as VM);
             }
           },
+          child: SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: Center(
+              child: Icon(
+                Icons.remove,
+                size: widget.size * 0.6,
+                color: style.activeForegroundColor,
+              ),
+            ),
+          ),
         ),
       );
     }
