@@ -1,5 +1,9 @@
+## [3.0.3] - 2022/09/14
+* fix theme
+
 ## [3.0.2] - 2022/09/14
 * fix min value type cast
+
 ## [3.0.1] - 2022/09/14
 * Add textStyle
 * add argument value deprecated argument count
