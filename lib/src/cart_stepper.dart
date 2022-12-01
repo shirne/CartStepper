@@ -27,7 +27,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
     this.size = 30.0,
     this.axis = Axis.horizontal,
     this.numberSize = 2,
-    this.elevation = 2,
+    this.elevation,
     this.style,
   })  : _value = (value ?? count ?? 0) as VM,
         _stepper = (stepper ?? 1) as VM,
@@ -50,7 +50,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
   final ValueChanged<VM> didChangeCount;
 
   /// elevation of [PhysicalModel]
-  final double elevation;
+  final double? elevation;
 
   /// widget style
   final CartStepperStyle? style;
@@ -98,11 +98,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final style = widget.style ??
-        // ? not fixed util 3.0.4
-        Theme.of(context).extension<CartStepperTheme>()?.style ??
-        CartStepperStyle.fromColorScheme(colorScheme);
+    final style = widget.style ?? CartStepperTheme.of(context);
 
     final isExpanded = _editMode || widget._value > 0;
 
@@ -204,16 +200,17 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     }
 
     return AnimatedPhysicalModel(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
       shape: style.shape,
-      borderRadius:
-          BorderRadius.all(style.radius ?? Radius.circular(widget.size)),
+      borderRadius: BorderRadius.all(
+        style.radius ?? Radius.circular(widget.size),
+      ),
       shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
       color: isExpanded
           ? style.activeBackgroundColor
           : style.deActiveBackgroundColor,
-      elevation: widget.elevation,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
+      elevation: widget.elevation ?? style.elevation,
       child: widget.axis == Axis.vertical
           ? Column(
               mainAxisSize: MainAxisSize.min,
