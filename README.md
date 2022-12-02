@@ -22,8 +22,8 @@ A fully customizable Flutter Widget to get count. It can be applicable in e-comm
 CartStepperStyle:
   - activeForegroundColor: Color, text color when counter > 0
   - activeBackgroundColor: Color, background color when counter > 0
-  - deActiveForegroundColor: Color, text color when counter == 0
-  - deActiveBackgroundColor: Color, background color when counter == 0
+  - foregroundColor: Color, text color when counter == 0
+  - backgroundColor: Color, background color when counter == 0
   - shape: BoxShape,
   - radius: Radius, the borderRadius of this widget, default caculating a roundedRectAngle
   - shadowColor: Color
@@ -43,6 +43,16 @@ Widget _buildStepper() {
              },
           );
 }
+
+```
+
+## Migrating
+
+```dart
+// from 3.x to 4.x
+// CartStepperStyle.
+deActiveForegroundColor => foregroundColor
+deActiveBackgroundColor => backgroundColor
 
 ```
 

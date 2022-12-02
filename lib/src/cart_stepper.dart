@@ -2,6 +2,7 @@ library cart_stepper;
 
 import 'dart:math' as math;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'stepper_style.dart';
@@ -26,7 +27,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
     required this.didChangeCount,
     this.size = 30.0,
     this.axis = Axis.horizontal,
-    this.numberSize = 2,
+    this.numberSize = 3,
     this.elevation,
     this.style,
   })  : _value = (value ?? count ?? 0) as VM,
@@ -74,6 +75,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
 
   num defaultValue = 0;
 
+  bool get isVertical => widget.axis == Axis.vertical;
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +99,21 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     return value.toInt() as VM;
   }
 
+  void _setValue(VM newValue) {
+    if (_editMode) {
+      setState(() {
+        _editMode = false;
+      });
+    }
+    widget.didChangeCount(newValue);
+  }
+
+  void _buttonSetValue(VM newValue) {
+    Feedback.forTap(context);
+
+    _setValue(newValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     final style = widget.style ?? CartStepperTheme.of(context);
@@ -106,24 +124,20 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
       GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          Feedback.forTap(context);
-          if (_editMode) {
-            setState(() {
-              _editMode = false;
-            });
-          }
-          widget.didChangeCount((widget._value + widget._stepper) as VM);
+          _buttonSetValue((widget._value + widget._stepper) as VM);
         },
         child: SizedBox(
-          width: widget.size,
-          height: widget.size,
-          child: Center(
-            child: Icon(
-              Icons.add,
-              size: widget.size,
-              color: isExpanded
-                  ? style.activeForegroundColor
-                  : style.deActiveForegroundColor,
+          width: isVertical ? widget.size : null,
+          height: isVertical ? null : widget.size,
+          child: AspectRatio(
+            aspectRatio: style.buttonAspectRatio,
+            child: Center(
+              child: Icon(
+                style.iconPlus ?? CupertinoIcons.add,
+                color: isExpanded
+                    ? style.activeForegroundColor
+                    : style.foregroundColor,
+              ),
             ),
           ),
         ),
@@ -143,9 +157,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           behavior: HitTestBehavior.opaque,
           child: Container(
             alignment: Alignment.center,
-            width: widget.axis == Axis.vertical
-                ? widget.size
-                : widget.size * widget.numberSize * .5,
+            width:
+                isVertical ? widget.size : widget.size * widget.numberSize * .5,
             child: _editMode
                 ? EditableText(
                     controller: _controller,
@@ -189,28 +202,20 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            Feedback.forTap(context);
-            if (_editMode) {
-              setState(() {
-                _editMode = false;
-              });
-            }
-            if (widget._value > 0) {
-              widget.didChangeCount(math.max(
-                  (widget._value - widget._stepper),
-                  VM is int
-                      ? defaultValue.toInt()
-                      : defaultValue.toDouble()) as VM);
-            }
+            _buttonSetValue(math.max((widget._value - widget._stepper),
+                    VM is int ? defaultValue.toInt() : defaultValue.toDouble())
+                as VM);
           },
           child: SizedBox(
-            width: widget.size,
-            height: widget.size,
-            child: Center(
-              child: Icon(
-                Icons.remove,
-                size: widget.size * 0.6,
-                color: style.activeForegroundColor,
+            width: isVertical ? widget.size : null,
+            height: isVertical ? null : widget.size,
+            child: AspectRatio(
+              aspectRatio: style.buttonAspectRatio,
+              child: Center(
+                child: Icon(
+                  style.iconMinus ?? CupertinoIcons.minus,
+                  color: style.activeForegroundColor,
+                ),
               ),
             ),
           ),
@@ -218,27 +223,35 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
       );
     }
 
-    return AnimatedPhysicalModel(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-      shape: style.shape,
-      borderRadius: BorderRadius.all(
-        style.radius ?? Radius.circular(widget.size),
+    return DefaultTextStyle(
+      style: (Theme.of(context).textTheme.bodyText1?.merge(style.textStyle) ??
+              style.textStyle ??
+              const TextStyle())
+          .copyWith(height: 1.25),
+      child: IconTheme.merge(
+        data: style.iconTheme.copyWith(size: widget.size * .6),
+        child: AnimatedPhysicalModel(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+          shape: style.shape,
+          borderRadius: BorderRadius.all(
+            style.radius ?? Radius.circular(widget.size),
+          ),
+          shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
+          color:
+              isExpanded ? style.activeBackgroundColor : style.backgroundColor,
+          elevation: widget.elevation ?? style.elevation,
+          child: isVertical
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: childs,
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: childs.reversed.toList(),
+                ),
+        ),
       ),
-      shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
-      color: isExpanded
-          ? style.activeBackgroundColor
-          : style.deActiveBackgroundColor,
-      elevation: widget.elevation ?? style.elevation,
-      child: widget.axis == Axis.vertical
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: childs,
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: childs.reversed.toList(),
-            ),
     );
   }
 }

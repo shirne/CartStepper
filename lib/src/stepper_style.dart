@@ -36,10 +36,10 @@ class CartStepperStyle {
   final Color activeBackgroundColor;
 
   /// Deactived foreground color 未激活状态的前景色(文字颜色)
-  final Color deActiveForegroundColor;
+  final Color foregroundColor;
 
   /// Deactived background color 未激活状态的背景色
-  final Color deActiveBackgroundColor;
+  final Color backgroundColor;
 
   /// widget shape. 组件形状
   final BoxShape shape;
@@ -53,17 +53,28 @@ class CartStepperStyle {
   /// value text style 显示值的字体样式
   final TextStyle? textStyle;
 
+  final IconThemeData iconTheme;
+
+  final IconData? iconPlus;
+  final IconData? iconMinus;
+
+  final double buttonAspectRatio;
+
   final double elevation;
 
   const CartStepperStyle({
     this.activeForegroundColor = Colors.white,
     this.activeBackgroundColor = Colors.blue,
-    this.deActiveForegroundColor = Colors.black54,
-    this.deActiveBackgroundColor = Colors.white,
+    this.foregroundColor = Colors.black54,
+    this.backgroundColor = Colors.white,
     this.shape = BoxShape.rectangle,
     this.radius,
     this.shadowColor,
     this.textStyle,
+    this.iconTheme = const IconThemeData(),
+    this.iconPlus,
+    this.iconMinus,
+    this.buttonAspectRatio = 1,
     this.elevation = 2,
   });
 
@@ -71,28 +82,46 @@ class CartStepperStyle {
     ThemeData theme, {
     BoxShape shape = BoxShape.rectangle,
     Radius? radius,
-    Color? shadowColor,
+    IconThemeData? iconTheme,
+    IconData? iconPlus,
+    IconData? iconMinus,
+    double? buttonAspectRatio,
+    double? elevation,
   }) {
     return CartStepperStyle.fromColorScheme(
       theme.colorScheme,
       shape: shape,
       radius: radius,
+      textStyle: theme.textTheme.bodyText1,
+      iconPlus: iconPlus,
+      iconMinus: iconMinus,
+      buttonAspectRatio: buttonAspectRatio,
+      elevation: elevation,
     );
   }
   factory CartStepperStyle.fromColorScheme(
     ColorScheme colorScheme, {
     BoxShape shape = BoxShape.rectangle,
     Radius? radius,
+    TextStyle? textStyle,
+    IconThemeData? iconTheme,
+    IconData? iconPlus,
+    IconData? iconMinus,
+    double? buttonAspectRatio,
     double? elevation,
   }) {
     return CartStepperStyle(
       activeForegroundColor: colorScheme.onPrimary,
       activeBackgroundColor: colorScheme.primary,
-      deActiveForegroundColor: colorScheme.onSurface,
-      deActiveBackgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
+      backgroundColor: colorScheme.surface,
       shadowColor: colorScheme.shadow,
       shape: shape,
       radius: radius,
+      textStyle: textStyle,
+      iconTheme: iconTheme ?? const IconThemeData(),
+      iconPlus: iconPlus,
+      iconMinus: iconMinus,
       elevation: elevation ?? 2,
     );
   }
@@ -100,12 +129,16 @@ class CartStepperStyle {
   CartStepperStyle copyWith({
     Color? activeForegroundColor,
     Color? activeBackgroundColor,
-    Color? deActiveForegroundColor,
-    Color? deActiveBackgroundColor,
+    Color? foregroundColor,
+    Color? backgroundColor,
     BoxShape? shape,
     Radius? radius,
     Color? shadowColor,
     TextStyle? textStyle,
+    IconThemeData? iconTheme,
+    IconData? iconPlus,
+    IconData? iconMinus,
+    double? buttonAspectRatio,
     double? elevation,
   }) {
     return CartStepperStyle(
@@ -113,14 +146,16 @@ class CartStepperStyle {
           activeForegroundColor ?? this.activeForegroundColor,
       activeBackgroundColor:
           activeBackgroundColor ?? this.activeBackgroundColor,
-      deActiveForegroundColor:
-          deActiveForegroundColor ?? this.deActiveForegroundColor,
-      deActiveBackgroundColor:
-          deActiveBackgroundColor ?? this.deActiveBackgroundColor,
+      foregroundColor: foregroundColor ?? this.foregroundColor,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
       shape: shape ?? this.shape,
       radius: radius ?? this.radius,
       shadowColor: shadowColor ?? this.shadowColor,
       textStyle: textStyle ?? this.textStyle,
+      iconTheme: iconTheme ?? this.iconTheme,
+      iconPlus: iconPlus ?? this.iconPlus,
+      iconMinus: iconMinus ?? this.iconMinus,
+      buttonAspectRatio: buttonAspectRatio ?? this.buttonAspectRatio,
       elevation: elevation ?? this.elevation,
     );
   }
