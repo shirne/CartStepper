@@ -119,6 +119,15 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final style = widget.style ?? CartStepperTheme.of(context);
 
     final isExpanded = _editMode || widget._value > 0;
+    final textStyle = _textStyle
+        .merge(Theme.of(context).textTheme.bodyText1?.merge(style.textStyle) ??
+            style.textStyle)
+        .copyWith(
+          height: 1.25,
+          fontSize: widget.size * 0.5,
+          color:
+              isExpanded ? style.activeForegroundColor : style.foregroundColor,
+        );
 
     List<Widget> childs = [
       GestureDetector(
@@ -130,7 +139,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           width: isVertical ? widget.size : null,
           height: isVertical ? null : widget.size,
           child: AspectRatio(
-            aspectRatio: style.buttonAspectRatio,
+            aspectRatio: isExpanded ? style.buttonAspectRatio : 1,
             child: Center(
               child: Icon(
                 style.iconPlus ?? CupertinoIcons.add,
@@ -164,10 +173,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     controller: _controller,
                     focusNode: _focusNode,
                     textAlign: TextAlign.center,
-                    style: _textStyle.merge(style.textStyle).copyWith(
-                          color: style.activeForegroundColor,
-                          fontSize: widget.size * 0.5,
-                        ),
+                    style: textStyle,
                     cursorColor: style.activeForegroundColor,
                     backgroundCursorColor: style.activeBackgroundColor,
                     onEditingComplete: () {
@@ -190,10 +196,6 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                 : Text(
                     widget._value.toString(),
                     softWrap: false,
-                    style: _textStyle.merge(style.textStyle).copyWith(
-                          color: style.activeForegroundColor,
-                          fontSize: widget.size * 0.5,
-                        ),
                   ),
           ),
         ),
@@ -224,10 +226,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     }
 
     return DefaultTextStyle(
-      style: (Theme.of(context).textTheme.bodyText1?.merge(style.textStyle) ??
-              style.textStyle ??
-              const TextStyle())
-          .copyWith(height: 1.25),
+      style: textStyle,
       child: IconTheme.merge(
         data: style.iconTheme.copyWith(size: widget.size * .6),
         child: AnimatedPhysicalModel(

@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               stepper: 0.01,
                               didChangeCount: (count) {
                                 setState(() {
-                                  _dCounter = count;
+                                  _dCounter = (count * 100).round() / 100;
                                 });
                               },
                             ),
@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               axis: Axis.vertical,
                               didChangeCount: (count) {
                                 setState(() {
-                                  _dCounter = count;
+                                  _dCounter = (count * 100).round() / 100;
                                 });
                               },
                             ),
@@ -182,10 +182,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       value: _counter,
                       size: 30,
                       style: const CartStepperStyle(
-                        deActiveForegroundColor: Colors.red,
+                        foregroundColor: Colors.red,
                         activeForegroundColor: Colors.white,
                         activeBackgroundColor: Colors.pinkAccent,
-                        radius: Radius.zero,
+                        buttonAspectRatio: 1.5,
                       ),
                       didChangeCount: (count) {
                         setState(() {
@@ -203,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: 30,
                       numberSize: 6,
                       style: const CartStepperStyle(
-                        deActiveForegroundColor: Colors.red,
+                        foregroundColor: Colors.red,
                         activeForegroundColor: Colors.white,
                         activeBackgroundColor: Colors.pinkAccent,
                         radius: Radius.zero,
