@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'stepper_style.dart';
 
+const _animateDuration = Duration(milliseconds: 300);
+
 const _textStyle = TextStyle(
   fontWeight: FontWeight.w400,
   fontFamily: "Quicksand",
@@ -109,8 +111,6 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   }
 
   void _buttonSetValue(VM newValue) {
-    Feedback.forTap(context);
-
     _setValue(newValue);
   }
 
@@ -128,10 +128,15 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           color:
               isExpanded ? style.activeForegroundColor : style.foregroundColor,
         );
+    final borderRadius = BorderRadius.all(
+      style.radius ?? Radius.circular(widget.size),
+    );
 
     List<Widget> childs = [
-      GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      InkResponse(
+        radius: widget.size,
+        borderRadius: borderRadius,
+        highlightShape: BoxShape.rectangle,
         onTap: () {
           _buttonSetValue((widget._value + widget._stepper) as VM);
         },
@@ -201,8 +206,10 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         ),
       );
       childs.add(
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        InkResponse(
+          radius: widget.size,
+          borderRadius: borderRadius,
+          highlightShape: BoxShape.rectangle,
           onTap: () {
             _buttonSetValue(math.max((widget._value - widget._stepper),
                     VM is int ? defaultValue.toInt() : defaultValue.toDouble())
@@ -223,33 +230,80 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           ),
         ),
       );
+      if (style.border != null) {
+        if (isVertical) {
+          childs[0] = Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: style.border!.top.color),
+              ),
+            ),
+            child: childs[0],
+          );
+          childs[2] = Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: style.border!.top.color),
+              ),
+            ),
+            child: childs[2],
+          );
+        } else {
+          childs[0] = Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: style.border!.top.color),
+              ),
+            ),
+            child: childs[0],
+          );
+          childs[2] = Container(
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(color: style.border!.top.color),
+              ),
+            ),
+            child: childs[2],
+          );
+        }
+      }
     }
 
+    Widget body = AnimatedPhysicalModel(
+      duration: _animateDuration,
+      curve: Curves.easeIn,
+      shape: style.shape,
+      borderRadius: borderRadius,
+      shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
+      color: isExpanded ? style.activeBackgroundColor : style.backgroundColor,
+      elevation: widget.elevation ?? style.elevation,
+      child: isVertical
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: childs,
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: childs.reversed.toList(),
+            ),
+    );
+
+    if (style.border != null) {
+      body = AnimatedContainer(
+        duration: _animateDuration,
+        curve: Curves.easeIn,
+        decoration: BoxDecoration(
+          border: style.border,
+          borderRadius: borderRadius,
+        ),
+        child: body,
+      );
+    }
     return DefaultTextStyle(
       style: textStyle,
       child: IconTheme.merge(
         data: style.iconTheme.copyWith(size: widget.size * .6),
-        child: AnimatedPhysicalModel(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-          shape: style.shape,
-          borderRadius: BorderRadius.all(
-            style.radius ?? Radius.circular(widget.size),
-          ),
-          shadowColor: style.shadowColor ?? const Color.fromARGB(255, 0, 0, 0),
-          color:
-              isExpanded ? style.activeBackgroundColor : style.backgroundColor,
-          elevation: widget.elevation ?? style.elevation,
-          child: isVertical
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: childs,
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: childs.reversed.toList(),
-                ),
-        ),
+        child: body,
       ),
     );
   }

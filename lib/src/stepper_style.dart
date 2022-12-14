@@ -47,6 +47,10 @@ class CartStepperStyle {
   /// Border radius of shape. 形状中的圆角值
   final Radius? radius;
 
+  /// Add a border around the shape use AnimatedContainer.
+  /// recommanded with out elevation.
+  final BoxBorder? border;
+
   /// shadow color 阴影颜色
   final Color? shadowColor;
 
@@ -69,6 +73,7 @@ class CartStepperStyle {
     this.backgroundColor = Colors.white,
     this.shape = BoxShape.rectangle,
     this.radius,
+    this.border,
     this.shadowColor,
     this.textStyle,
     this.iconTheme = const IconThemeData(),
@@ -82,6 +87,7 @@ class CartStepperStyle {
     ThemeData theme, {
     BoxShape shape = BoxShape.rectangle,
     Radius? radius,
+    BoxBorder? border,
     IconThemeData? iconTheme,
     IconData? iconPlus,
     IconData? iconMinus,
@@ -92,6 +98,7 @@ class CartStepperStyle {
       theme.colorScheme,
       shape: shape,
       radius: radius,
+      border: border,
       textStyle: theme.textTheme.bodyText1,
       iconPlus: iconPlus,
       iconMinus: iconMinus,
@@ -103,6 +110,7 @@ class CartStepperStyle {
     ColorScheme colorScheme, {
     BoxShape shape = BoxShape.rectangle,
     Radius? radius,
+    BoxBorder? border,
     TextStyle? textStyle,
     IconThemeData? iconTheme,
     IconData? iconPlus,
@@ -118,6 +126,7 @@ class CartStepperStyle {
       shadowColor: colorScheme.shadow,
       shape: shape,
       radius: radius,
+      border: border,
       textStyle: textStyle,
       iconTheme: iconTheme ?? const IconThemeData(),
       iconPlus: iconPlus,
@@ -133,6 +142,8 @@ class CartStepperStyle {
     Color? backgroundColor,
     BoxShape? shape,
     Radius? radius,
+    BoxBorder? border,
+    bool noBorder = false,
     Color? shadowColor,
     TextStyle? textStyle,
     IconThemeData? iconTheme,
@@ -150,6 +161,7 @@ class CartStepperStyle {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       shape: shape ?? this.shape,
       radius: radius ?? this.radius,
+      border: noBorder ? null : (border ?? this.border),
       shadowColor: shadowColor ?? this.shadowColor,
       textStyle: textStyle ?? this.textStyle,
       iconTheme: iconTheme ?? this.iconTheme,

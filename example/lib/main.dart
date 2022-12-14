@@ -54,12 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ListView(
           children: <Widget>[
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Text('Flutter: ${Platform.version}'),
-              ),
-            ),
             Row(
               children: [
                 Expanded(
@@ -135,6 +129,25 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
+                            child: CartStepperInt(
+                              value: _counter,
+                              axis: Axis.vertical,
+                              style: CartStepperTheme.of(context).copyWith(
+                                activeBackgroundColor: Colors.white,
+                                activeForegroundColor: Colors.blue,
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              didChangeCount: (count) {
+                                setState(() {
+                                  _counter = count;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: CartStepperDouble(
                               value: _dCounter,
                               stepper: 0.01,
@@ -185,6 +198,51 @@ class _MyHomePageState extends State<MyHomePage> {
                         foregroundColor: Colors.red,
                         activeForegroundColor: Colors.white,
                         activeBackgroundColor: Colors.pinkAccent,
+                        buttonAspectRatio: 1.5,
+                      ),
+                      didChangeCount: (count) {
+                        setState(() {
+                          _counter = count;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Center(
+                    child: CartStepperInt(
+                      value: _counter,
+                      size: 30,
+                      style: CartStepperStyle(
+                        foregroundColor: Colors.black87,
+                        activeForegroundColor: Colors.black87,
+                        activeBackgroundColor: Colors.white,
+                        border: Border.all(color: Colors.grey),
+                        elevation: 0,
+                        buttonAspectRatio: 1.5,
+                      ),
+                      didChangeCount: (count) {
+                        setState(() {
+                          _counter = count;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Center(
+                    child: CartStepperInt(
+                      value: _counter,
+                      size: 30,
+                      style: CartStepperStyle(
+                        foregroundColor: Colors.black87,
+                        activeForegroundColor: Colors.black87,
+                        activeBackgroundColor: Colors.white,
+                        border: Border.all(color: Colors.grey),
+                        radius: const Radius.circular(8),
+                        elevation: 0,
                         buttonAspectRatio: 1.5,
                       ),
                       didChangeCount: (count) {

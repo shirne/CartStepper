@@ -26,22 +26,29 @@ CartStepperStyle:
   - backgroundColor: Color, background color when counter == 0
   - shape: BoxShape,
   - radius: Radius, the borderRadius of this widget, default caculating a roundedRectAngle
+  - BoxBorder: Border of the Widget
   - shadowColor: Color
+  - textStyle,
+  - iconTheme = const IconThemeData(),
+  - iconPlus: IconData, customize the plus icon
+  - iconMinus: IconData, customize the minus icon
+  - buttonAspectRatio: plus & minux button's aspectRatio, default 1,
+  - elevation: Widget's elevation,
 
 ## Using
 Create a widget to show and modify a number:
 ```dart
 Widget _buildStepper() {
   return CartStepperInt(
-               count: _counter,
-               size: 30,
-               style: CartStepperStyle.fromTheme(Theme.of(context)).copyWith(activeForegroundColor: Colors.purple,)
-               didChangeCount: (count) {
-               setState(() {
-                _counter = count;
-               });
-             },
-          );
+        count: _counter,
+        size: 30,
+        style: CartStepperTheme.of(context).copyWith(activeForegroundColor: Colors.purple,)
+        didChangeCount: (count) {
+        setState(() {
+        _counter = count;
+        });
+      },
+  );
 }
 
 ```
