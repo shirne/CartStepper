@@ -1,11 +1,8 @@
 ## [4.0.0] - 2022/12/14
 * refactor buttons
 * add style.elevation
+* add custom Icon
 * add button aspectRatio
-
-## [3.0.3] - 2022/12/01
-* refactor
-* Add custom Icon
 
 ## [3.0.3] - 2022/09/14
 * fix theme
