@@ -54,16 +54,22 @@ class CartStepperStyle {
   /// shadow color 阴影颜色
   final Color? shadowColor;
 
-  /// value text style 显示值的字体样式
+  /// Value text style 显示值的字体样式
   final TextStyle? textStyle;
 
+  /// Icon theme
   final IconThemeData iconTheme;
 
+  /// Add button icon
   final IconData? iconPlus;
+
+  /// Subtract button icon
   final IconData? iconMinus;
 
+  /// Button aspectRatio
   final double buttonAspectRatio;
 
+  /// Widget elevation
   final double elevation;
 
   const CartStepperStyle({
@@ -83,6 +89,7 @@ class CartStepperStyle {
     this.elevation = 2,
   });
 
+  /// Create style from theme
   factory CartStepperStyle.fromTheme(
     ThemeData theme, {
     BoxShape shape = BoxShape.rectangle,
@@ -106,6 +113,8 @@ class CartStepperStyle {
       elevation: elevation,
     );
   }
+
+  /// Create style from colorScheme
   factory CartStepperStyle.fromColorScheme(
     ColorScheme colorScheme, {
     BoxShape shape = BoxShape.rectangle,
@@ -135,6 +144,7 @@ class CartStepperStyle {
     );
   }
 
+  /// copyWidth
   CartStepperStyle copyWith({
     Color? activeForegroundColor,
     Color? activeBackgroundColor,
