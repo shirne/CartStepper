@@ -106,7 +106,7 @@ class CartStepperStyle {
       shape: shape,
       radius: radius,
       border: border,
-      textStyle: theme.textTheme.bodyText1,
+      textStyle: theme.textTheme.bodyMedium,
       iconPlus: iconPlus,
       iconMinus: iconMinus,
       buttonAspectRatio: buttonAspectRatio,

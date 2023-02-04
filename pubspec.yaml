@@ -1,11 +1,11 @@
 name: cart_stepper
 description: A fully customizable Flutter Widget to get count. It can be applicable in e-commerce apps for getting cart count.
-version: 4.0.0
+version: 4.1.0
 homepage:
 repository: https://github.com/shirne/CartStepper/
 
 environment:
-  sdk: ">=2.14.0 <3.0.0"
+  sdk: ">=2.14.0 <4.0.0"
 
 dependencies:
   flutter:

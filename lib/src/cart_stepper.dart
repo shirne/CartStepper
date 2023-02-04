@@ -120,7 +120,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
 
     final isExpanded = _editMode || widget._value > 0;
     final textStyle = _textStyle
-        .merge(Theme.of(context).textTheme.bodyText1?.merge(style.textStyle) ??
+        .merge(Theme.of(context).textTheme.bodyMedium?.merge(style.textStyle) ??
             style.textStyle)
         .copyWith(
           height: 1.25,
