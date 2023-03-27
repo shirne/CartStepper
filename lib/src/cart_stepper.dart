@@ -30,6 +30,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
     this.size = 30.0,
     this.axis = Axis.horizontal,
     this.numberSize = 3,
+    this.editKeyboardType,
     this.elevation,
     this.style,
   })  : _value = (value ?? count ?? 0) as VM,
@@ -45,6 +46,8 @@ class CartStepper<VM extends num> extends StatefulWidget {
 
   /// number length of the value
   final double numberSize;
+
+  final TextInputType? editKeyboardType;
 
   /// widget direction
   final Axis axis;
@@ -181,6 +184,8 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     style: textStyle,
                     cursorColor: style.activeForegroundColor,
                     backgroundCursorColor: style.activeBackgroundColor,
+                    keyboardType:
+                        widget.editKeyboardType ?? TextInputType.number,
                     onEditingComplete: () {
                       setState(() {
                         _editMode = false;

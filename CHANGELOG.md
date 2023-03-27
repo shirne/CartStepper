@@ -1,4 +1,7 @@
-## [4.1.0] - 2022/12/14
+## [4.1.1] - 2023/03/27
+* Add editKeyboardType for CartStepper
+
+## [4.1.0] - 2023/02/04
 * update for dart3.0
 
 ## [4.0.0] - 2022/12/14
