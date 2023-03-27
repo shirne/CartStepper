@@ -181,6 +181,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     controller: _controller,
                     focusNode: _focusNode,
                     textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
                     style: textStyle,
                     cursorColor: style.activeForegroundColor,
                     backgroundCursorColor: style.activeBackgroundColor,
