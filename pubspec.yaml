@@ -4,7 +4,7 @@ version: 4.1.2
 homepage:
 repository: https://github.com/shirne/CartStepper/
 screenshots: 
-  - description: 'list of features with some toasts'
+  - description: 'cart stepper input'
     path: screenshots/preview.jpg
 
 environment:
