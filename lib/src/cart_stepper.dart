@@ -32,6 +32,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
     this.numberSize = 3,
     this.editKeyboardType,
     this.elevation,
+    this.alwaysExpanded = false,
     this.style,
   })  : _value = (value ?? count ?? 0) as VM,
         _stepper = (stepper ?? 1) as VM,
@@ -54,6 +55,9 @@ class CartStepper<VM extends num> extends StatefulWidget {
 
   /// value callback
   final ValueChanged<VM> didChangeCount;
+
+  /// always expanded while value is 0
+  final bool alwaysExpanded;
 
   /// elevation of [PhysicalModel]
   final double? elevation;
@@ -121,7 +125,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   Widget build(BuildContext context) {
     final style = widget.style ?? CartStepperTheme.of(context);
 
-    final isExpanded = _editMode || widget._value > 0;
+    final isExpanded = _editMode || widget.alwaysExpanded || widget._value > 0;
     final textStyle = _textStyle
         .merge(Theme.of(context).textTheme.bodyMedium?.merge(style.textStyle) ??
             style.textStyle)

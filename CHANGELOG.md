@@ -1,3 +1,6 @@
+## [4.2.0] - 2023/07/25
+* add alwaysExpanded
+
 ## [4.1.2] - 2023/07/25
 * add screenshots
 

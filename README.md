@@ -17,6 +17,7 @@ A fully customizable Flutter Widget to get count. It can be applicable in e-comm
   - numberSize: double, number spacer, default 2
   - didChangeCount: Function, @required to set the release counter
   - style: CartStepperStyle
+  - alwaysExpanded: bool, always expanded while value is 0
   - elevation: double, display a shadow around this widget
   
 CartStepperStyle:

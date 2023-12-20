@@ -212,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: CartStepperInt(
                       value: _counter,
                       size: 30,
+                      alwaysExpanded: true,
                       style: CartStepperStyle(
                         foregroundColor: Colors.black87,
                         activeForegroundColor: Colors.black87,
