@@ -221,7 +221,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           highlightShape: BoxShape.rectangle,
           onTap: () {
             _buttonSetValue(math.max((widget._value - widget._stepper),
-                    VM is int ? defaultValue.toInt() : defaultValue.toDouble())
+                    VM == int ? defaultValue.toInt() : defaultValue.toDouble())
                 as VM);
           },
           child: SizedBox(
