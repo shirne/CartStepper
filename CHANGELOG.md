@@ -1,3 +1,6 @@
+## [4.2.2] - 2023/12/22
+* fix type cast
+
 ## [4.2.1] - 2023/12/20
 * fix a type cast error
 
