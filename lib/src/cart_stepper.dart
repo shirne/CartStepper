@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'stepper_style.dart';
 
@@ -41,6 +42,7 @@ class CartStepper<VM extends num> extends StatefulWidget {
     this.size = 30.0,
     this.axis = Axis.horizontal,
     this.numberSize = 3,
+    this.format,
     this.editKeyboardType,
     this.elevation,
     this.alwaysExpanded = false,
@@ -58,6 +60,8 @@ class CartStepper<VM extends num> extends StatefulWidget {
 
   /// number length of the value
   final double numberSize;
+
+  final NumberFormat? format;
 
   final TextInputType? editKeyboardType;
 
@@ -100,8 +104,16 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   @override
   void initState() {
     super.initState();
-    lastText = widget._value.toString();
+    lastText = format(widget._value);
     _controller = TextEditingController(text: lastText);
+  }
+
+  String format(VM? value) {
+    if (value == null) return '';
+    if (widget.format != null) {
+      return widget.format!.format(value);
+    }
+    return value.toString();
   }
 
   @override
@@ -188,7 +200,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         GestureDetector(
           onTap: () {
             setState(() {
-              lastText = widget._value.toString();
+              lastText = format(widget._value);
               _controller.text = lastText;
               _editMode = !_editMode;
               _focusNode.requestFocus();
@@ -224,13 +236,14 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                         _controller.selection =
                             TextSelection.collapsed(offset: lastText.length);
                       } else {
+                        value = widget.format?.format(newValue) ?? value;
                         lastText = value;
                         widget.didChangeCount(newValue);
                       }
                     },
                   )
                 : Text(
-                    widget._value.toString(),
+                    format(widget._value),
                     softWrap: false,
                   ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cart_stepper/cart_stepper.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(const MyApp());
 
@@ -85,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: CartStepperDouble(
                           value: _dCounter,
                           stepper: 0.01,
+                          format: NumberFormat('##0.00'),
                           didChangeCount: (count) {
                             setState(() {
                               _dCounter = (count * 100).round() / 100;
@@ -254,6 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       value: _counter,
                       size: 30,
                       numberSize: 6,
+                      format: NumberFormat('0000'),
                       style: const CartStepperStyle(
                         foregroundColor: Colors.red,
                         activeForegroundColor: Colors.white,
