@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'stepper_style.dart';
 
@@ -14,6 +15,16 @@ const _textStyle = TextStyle(
   fontFamily: "Quicksand",
   fontStyle: FontStyle.normal,
 );
+
+VM _as<VM extends num>(num? value) {
+  value ??= 0.0;
+
+  if (value is VM) return value;
+  if (0 is VM) {
+    return value.toInt() as VM;
+  }
+  return value.toDouble() as VM;
+}
 
 /// Cart stepper widget
 class CartStepper<VM extends num> extends StatefulWidget {
@@ -34,8 +45,8 @@ class CartStepper<VM extends num> extends StatefulWidget {
     this.elevation,
     this.alwaysExpanded = false,
     this.style,
-  })  : _value = (value ?? count ?? 0) as VM,
-        _stepper = (stepper ?? 1) as VM,
+  })  : _value = (value ?? count ?? (0 is VM ? 0 : 0.0)) as VM,
+        _stepper = (stepper ?? (0 is VM ? 1 : 1.0)) as VM,
         super(key: key);
 
   final VM _value;
@@ -101,11 +112,18 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
   }
 
   VM? parseValue(String text) {
-    if (text.isEmpty) return 0 as VM;
-    double? value = double.tryParse(text);
-    if (value == null) return null;
-    if (value is VM) return value as VM;
-    return value.toInt() as VM;
+    num? value;
+    if (text.isEmpty) {
+      value = 0;
+    } else {
+      if (0 is VM) {
+        value = int.tryParse(text);
+      } else {
+        value = double.tryParse(text);
+      }
+    }
+
+    return _as(value);
   }
 
   void _setValue(VM newValue) {
@@ -126,6 +144,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
     final style = widget.style ?? CartStepperTheme.of(context);
 
     final isExpanded = _editMode || widget.alwaysExpanded || widget._value > 0;
+
     final textStyle = _textStyle
         .merge(Theme.of(context).textTheme.bodyMedium?.merge(style.textStyle) ??
             style.textStyle)
@@ -145,7 +164,7 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
         borderRadius: borderRadius,
         highlightShape: BoxShape.rectangle,
         onTap: () {
-          _buttonSetValue((widget._value + widget._stepper) as VM);
+          _buttonSetValue(_as(widget._value + widget._stepper));
         },
         child: SizedBox(
           width: isVertical ? widget.size : null,
@@ -190,6 +209,9 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
                     style: textStyle,
                     cursorColor: style.activeForegroundColor,
                     backgroundCursorColor: style.activeBackgroundColor,
+                    inputFormatters: [
+                      if (0 is VM) FilteringTextInputFormatter.digitsOnly
+                    ],
                     onEditingComplete: () {
                       setState(() {
                         _editMode = false;
@@ -220,9 +242,10 @@ class _CartStepperState<VM extends num> extends State<CartStepper<VM>> {
           borderRadius: borderRadius,
           highlightShape: BoxShape.rectangle,
           onTap: () {
-            _buttonSetValue(math.max((widget._value - widget._stepper),
-                    VM == int ? defaultValue.toInt() : defaultValue.toDouble())
-                as VM);
+            _buttonSetValue(_as(math.max(
+              (widget._value - widget._stepper),
+              _as(defaultValue),
+            )));
           },
           child: SizedBox(
             width: isVertical ? widget.size : null,

@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 1;
   int _counterLimit = 1;
 
-  double _dCounter = 0.0;
+  double _dCounter = 0.01;
 
   @override
   void initState() {
@@ -64,38 +64,33 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Text('普通调用:'),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CartStepperInt(
-                              style: CartStepperStyle.fromTheme(
-                                Theme.of(context),
-                                radius: Radius.zero,
-                              ),
-                              elevation: 7,
-                              value: _counterInit,
-                              didChangeCount: (count) {
-                                setState(() {
-                                  _counterInit = count;
-                                });
-                              },
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CartStepperInt(
+                          style: CartStepperStyle.fromTheme(
+                            Theme.of(context),
+                            radius: Radius.zero,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CartStepperDouble(
-                              value: _dCounter,
-                              stepper: 0.01,
-                              didChangeCount: (count) {
-                                setState(() {
-                                  _dCounter = (count * 100).round() / 100;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
+                          elevation: 7,
+                          value: _counterInit,
+                          didChangeCount: (count) {
+                            setState(() {
+                              _counterInit = count;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CartStepperDouble(
+                          value: _dCounter,
+                          stepper: 0.01,
+                          didChangeCount: (count) {
+                            setState(() {
+                              _dCounter = (count * 100).round() / 100;
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),
