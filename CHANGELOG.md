@@ -1,3 +1,6 @@
+## [4.3.0] - 2023/12/22
+* add NumberFormat to convert value to String for show
+
 ## [4.2.2] - 2023/12/22
 * fix type cast
 
